@@ -31,11 +31,11 @@ print ('Got api-key: {}'.format(LASTFM_API_KEY))
 # Request Methods:
 def queryLastFM():
     payload = {
-        method:     'user.getrecenttracks',
-        user:       LASTFM_USER,
-        api_key:    LASTFM_API_KEY,
-        format:     'json',
-        limit:      5
+        'method':     'user.getrecenttracks',
+        'user':       LASTFM_USER,
+        'api_key':    LASTFM_API_KEY,
+        'format':     'json',
+        'limit':      5
     }
     r = requests.get('{}/2.0/'.format(LASTFM_HOST), params=payload)
     print (r.text)
