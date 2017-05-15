@@ -34,12 +34,12 @@ def queryLastFM():
         method:     'user.getrecenttracks',
         user:       LASTFM_USER,
         api_key:    LASTFM_API_KEY,
-        format:     'json'
+        format:     'json',
         limit:      5
     }
     r = requests.get('{}/2.0/'.format(LASTFM_HOST), params=payload)
-    print r.text
-    print r.json
+    print (r.text)
+    print (r.json)
 
 # LED-Control Methods:
 def colorWipe(strip, color, wait_ms=50):
