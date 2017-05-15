@@ -1,7 +1,8 @@
 import time
+import os
+import requests
 from neopixel import *
 from ConfigParser import SafeConfigParser
-import os
 
 parser = SafeConfigParser()
 parser.read('config.ini')
