@@ -38,7 +38,7 @@ def queryLastFM():
         'format':     'json',
         'limit':      5
     }
-    r = requests.get('{}/2.0/'.format(LASTFM_HOST), params=payload)
+    r = requests.get('http://{}/2.0/'.format(LASTFM_HOST), params=payload)
     print (r.text)
     print (r.json)
 
