@@ -39,7 +39,7 @@ def queryLastFM():
         'limit':      1
     }
     r = requests.get('http://{}/2.0/'.format(LASTFM_HOST), params=payload)
-    mostRecentSong = r.json().recenttracks.track[0]
+    mostRecentSong = r.json()['recenttracks']['track'][0]
     print (mostRecentSong)
 
 # LED-Control Methods:
