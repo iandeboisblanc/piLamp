@@ -40,7 +40,7 @@ def queryLastFM():
     }
     r = requests.get('http://{}/2.0/'.format(LASTFM_HOST), params=payload)
     print (r.text)
-    print (r.json)
+    print (r.json())
 
 # LED-Control Methods:
 def colorWipe(strip, color, wait_ms=50):
