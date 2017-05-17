@@ -40,7 +40,10 @@ def queryLastFM():
     }
     r = requests.get('http://{}/2.0/'.format(LASTFM_HOST), params=payload)
     mostRecentSong = r.json()['recenttracks']['track'][0]
+    currentlyPlaying = mostRecentSong['@attr']['nowplaying']
     print (mostRecentSong)
+    print (currentlyPlaying)
+    print (type(currentlyPlaying))
 
 # LED-Control Methods:
 def colorWipe(strip, color, wait_ms=50):
