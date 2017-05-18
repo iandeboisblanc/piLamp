@@ -30,7 +30,7 @@ print ('Got network: {}'.format(WIFI_NAME))
 print ('Got api-key: {}'.format(LASTFM_API_KEY))
 
 # Request Methods:
-def queryLastFM():
+def getCurrentSongFromLastFM():
     payload = {
         'method':     'user.getrecenttracks',
         'user':       LASTFM_USER,
@@ -40,10 +40,11 @@ def queryLastFM():
     }
     r = requests.get('http://{}/2.0/'.format(LASTFM_HOST), params=payload)
     mostRecentSong = r.json()['recenttracks']['track'][0]
-    currentlyPlaying = mostRecentSong['@attr']['nowplaying']
-    print (mostRecentSong)
-    print (currentlyPlaying)
-    print (type(currentlyPlaying))
+    currentlyPlaying = mostRecentSong['@attr']['nowplaying'] == 'true'
+    if currentlyPlaying:
+        return mostRecentSong
+    else:
+        return None
 
 # LED-Control Methods:
 def colorWipe(strip, color, wait_ms=50):
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     strip.begin()
 
     print ('Press Ctrl-C to quit.')
-    queryLastFM()
+    currentSong = getCurrentSongFromLastFM()
     while True:
         colorWipe(strip, Color(255, 0, 0))
         colorWipe(strip, Color(0, 255, 0))
