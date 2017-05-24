@@ -3,6 +3,8 @@ import os
 import requests
 from neopixel import *
 from ConfigParser import SafeConfigParser
+from songMapper import generatePattern
+from apiTest import generateSpotifyToken, getMostRecentSong, getSongQualities
 
 parser = SafeConfigParser()
 parser.read('config.ini')
@@ -20,31 +22,8 @@ LED_INVERT      = False
 WIFI_NAME = parser.get('wifi', 'wifi_name')
 WIFI_PASSWORD = parser.get('wifi', 'wifi_password')
 
-LASTFM_API_KEY = parser.get('apis', 'lastfm_api_key')
-LASTFM_HOST = parser.get('apis', 'lastfm_host')
-
-# Account Config:
-LASTFM_USER = parser.get('accounts', 'lastfm_user')
-
 print ('Got network: {}'.format(WIFI_NAME))
 print ('Got api-key: {}'.format(LASTFM_API_KEY))
-
-# Request Methods:
-def getCurrentSongFromLastFM():
-    payload = {
-        'method':     'user.getrecenttracks',
-        'user':       LASTFM_USER,
-        'api_key':    LASTFM_API_KEY,
-        'format':     'json',
-        'limit':      1
-    }
-    r = requests.get('http://{}/2.0/'.format(LASTFM_HOST), params=payload)
-    mostRecentSong = r.json()['recenttracks']['track'][0]
-    currentlyPlaying = mostRecentSong['@attr']['nowplaying'] == 'true'
-    if currentlyPlaying:
-        return mostRecentSong
-    else:
-        return None
 
 # LED-Control Methods:
 def colorWipe(strip, color, wait_ms=50):
@@ -54,11 +33,21 @@ def colorWipe(strip, color, wait_ms=50):
         time.sleep(wait_ms/1000.0)
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        username = sys.argv[1]
+        print ('Press Ctrl-C to quit.')
+    else:
+        print ("Usage: %s 'spotify username'" % (sys.argv[0],))
+        sys.exit()
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     strip.begin()
 
-    print ('Press Ctrl-C to quit.')
-    currentSong = getCurrentSongFromLastFM()
+    token = generateSpotifyToken(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
+    song = getMostRecentSong(token)
+    print ('Checking for currently playing song...')
+    # if song['is_playing']:
+    qualities = getSongQualities(song['item']['id'])
+
     while True:
-        colorWipe(strip, Color(255, 0, 0))
-        colorWipe(strip, Color(0, 255, 0))
+        state = generatePattern(qualities, time.time())
+        strip.setBrightness(state['brightness'])
