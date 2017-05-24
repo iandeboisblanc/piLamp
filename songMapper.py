@@ -36,7 +36,7 @@ def generatePattern(songQualities, t):
     avgBrightness = 3.0 * energy
     brightness = avgBrightness + (0.5 + energy) * sin(2.0*pi*t*bpm/60.0) + energy * sin(2.0*pi*timeSignature*t*bpm/60.0)
     state = {
-        "brightness": math.floor(brightness * 255.0/5.5)
+        'brightness': int(math.floor(brightness * 255.0/5.5))
     }
     return state
 
