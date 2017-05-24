@@ -1,6 +1,7 @@
 import time
 import os
 import requests
+import sys
 from neopixel import *
 from ConfigParser import SafeConfigParser
 from songMapper import generatePattern
@@ -17,13 +18,10 @@ LED_DMA         = 5
 LED_BRIGHTNESS  = 255
 LED_INVERT      = False
 
-
 # Network Config:
-WIFI_NAME = parser.get('wifi', 'wifi_name')
-WIFI_PASSWORD = parser.get('wifi', 'wifi_password')
-
-print ('Got network: {}'.format(WIFI_NAME))
-print ('Got api-key: {}'.format(LASTFM_API_KEY))
+SPOTIFY_CLIENT_ID = parser.get('apis', 'spotify_client_id')
+SPOTIFY_CLIENT_SECRET = parser.get('apis', 'spotify_client_secret')
+SPOTIFY_REDIRECT_URL = parser.get('apis', 'spotify_redirect_url')
 
 # LED-Control Methods:
 def colorWipe(strip, color, wait_ms=50):
