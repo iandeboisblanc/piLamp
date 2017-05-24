@@ -44,7 +44,7 @@ if __name__ == '__main__':
     song = getMostRecentSong(token)
     print ('Checking for currently playing song...')
     # if song['is_playing']:
-    qualities = getSongQualities(song['item']['id'])
+    qualities = getSongQualities(token, song['item']['id'])
 
     while True:
         state = generatePattern(qualities, time.time())
