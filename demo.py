@@ -48,4 +48,5 @@ if __name__ == '__main__':
 
     while True:
         state = generatePattern(qualities, time.time())
-        strip.setBrightness(int(state['brightness']))
+        colorWipe(strip, Color(255, 0, 0))
+        strip.setBrightness(state['brightness'])
