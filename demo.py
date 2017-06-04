@@ -46,6 +46,9 @@ if __name__ == '__main__':
     print ('Playing:', song['item']['name'])
     # if song['is_playing']:
     qualities = getSongQualities(token, song['item']['id'])
+    print ('BPM:', qualities['tempo'])
+    print ('Time Signature:', qualities['time_signature'])
+    print ('Energy:', qualities['energy'])
 
     colorWipe(strip, Color(255, 0, 0))
     while True:
