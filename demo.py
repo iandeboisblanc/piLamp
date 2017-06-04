@@ -41,8 +41,9 @@ if __name__ == '__main__':
     strip.begin()
 
     token = generateSpotifyToken(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
-    song = getMostRecentSong(token)
     print ('Checking for currently playing song...')
+    song = getMostRecentSong(token)
+    print ('Playing:', song['item']['name'])
     # if song['is_playing']:
     qualities = getSongQualities(token, song['item']['id'])
 
