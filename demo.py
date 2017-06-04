@@ -51,3 +51,4 @@ if __name__ == '__main__':
         state = generatePattern(qualities, time.time())
         print ('brightness:', state['brightness'])
         strip.setBrightness(state['brightness'])
+        strip.show()
