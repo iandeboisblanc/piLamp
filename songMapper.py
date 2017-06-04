@@ -59,15 +59,20 @@ def piecewiseBrightness(songQualities, t):
     # If in first beat of measure, generate larger output
     if (timeIntoMeasure < periodOfBeat):
         peakBrightness = 175.0 + (255.0 - 175.0) * energy
-        print ('==First beat. max brightness:', peakBrightness)
+        print ('==First beat')
+        print( '==max brightness:', peakBrightness)
+        print( '==min brightness:', minBrightness)
     else:
         peakBrightness = 175.0
-        print ('==Later beat. max brightness:', peakBrightness)
+        print ('==Later beat')
+        print( '==max brightness:', peakBrightness)
+        print( '==min brightness:', minBrightness)
 
     # If in first half of beat, slope is positive
     if (timeIntoBeat < periodOfBeat / 2):
         slope = (peakBrightness - minBrightness) / (periodOfBeat / 2)
-        brightness = slope * timeIntoBeat
+        intercept = minBrightness
+        brightness = slope * timeIntoBeat + intercept
         print ('...going UP')
         print ('...brightness:', brightness)
         print ('...slope:', slope)
@@ -75,7 +80,8 @@ def piecewiseBrightness(songQualities, t):
         print ('...T_beat:', periodOfBeat)
     else:
         slope = (minBrightness - peakBrightness) / (periodOfBeat / 2)
-        brightness = slope * timeIntoBeat + 2 * peakBrightness
+        intercept = minBrightness + 2 * (peakBrightness - minBrightness)
+        brightness = slope * timeIntoBeat + intercept
         print ('...going DOWN')
         print ('...brightness:', brightness)
         print ('...slope:', slope)
