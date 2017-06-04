@@ -46,8 +46,8 @@ if __name__ == '__main__':
     # if song['is_playing']:
     qualities = getSongQualities(token, song['item']['id'])
 
+    colorWipe(strip, Color(255, 0, 0))
     while True:
         state = generatePattern(qualities, time.time())
-        colorWipe(strip, Color(255, 0, 0))
         print ('brightness:', state['brightness'])
         strip.setBrightness(state['brightness'])
