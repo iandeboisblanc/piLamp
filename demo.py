@@ -4,7 +4,7 @@ import requests
 import sys
 from neopixel import *
 from ConfigParser import SafeConfigParser
-from songMapper import generatePattern
+from songMapper import generatePattern, piecewiseBrightness
 from apiTest import generateSpotifyToken, getMostRecentSong, getSongQualities
 
 parser = SafeConfigParser()
@@ -49,7 +49,9 @@ if __name__ == '__main__':
 
     colorWipe(strip, Color(255, 0, 0))
     while True:
-        state = generatePattern(qualities, time.time())
-        print ('brightness:', state['brightness'])
-        strip.setBrightness(state['brightness'])
+        # state = generatePattern(qualities, time.time())
+        # print ('brightness:', state['brightness'])
+        brightness = piecewiseBrightness(qualities, time.time())
+        print ('brightness:', brightness)
+        strip.setBrightness(brightness)
         strip.show()

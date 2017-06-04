@@ -29,8 +29,11 @@ def generatePattern(songQualities, t):
     # f(w,t) = A + B*sin(2pi*wt) + C*sin(2pi*2wt) + D*sin(2pi*3wt)
     #   + E*cos(2pi*wt) + F*cos(2pi*2wt) + G*cos(2pi*3wt)
 
+    #  w => phase (radians), t => time (s)
+
     # For brightness, all LEDs should probably have same w (flash concurrently):
-    # f(t) = A + B*sin(2pi*t*(bpm/60)) + C*sin(2pi*timeSignature*t*(bpm/60))
+    # f(t) = A + B*sin(2pi*t*(bpm/60)) + C*sin(2pi*t*(bpm/60)/timeSignature)
+
     pi = math.pi
     sin = math.sin
     avgBrightness = 3.0
@@ -41,6 +44,34 @@ def generatePattern(songQualities, t):
     }
     return state
 
-    # input -> state
-    # state + ts -> new state
-    # new state -> draws it
+def piecewiseBrightness(songQualities, t):
+    bpm = songQualities['tempo'] # float bpm
+    timeSignature = songQualities['time_signature'] # int beats / bar
+    energy = songQualities['energy'] # 0-1f
+
+    periodOfMeasure = 60.0 * timeSignature / bpm
+    periodOfBeat = 60.0 / bpm
+
+    timeIntoMeasure = t % periodOfMeasure
+    timeIntoBeat = t % periodOfBeat
+
+    minBrightness = 175.0 - (175.0 - 125.0) * energy
+    # If in first beat of measure, generate larger output
+    if (timeIntoMeasure < periodOfBeat):
+        peakBrightness = 175.0 + (255.0 - 175.0) * energy
+    else:
+        peakBrightness = 175.0
+
+    # If in first half of beat, slope is positive
+    if (timeIntoBeat < periodOfBeat / 2):
+        slope = (peakBrightness - minBrightness) / (periodOfBeat / 2)
+        brightness = slope * timeIntoBeat
+    else:
+        slope = (minBrightness - peakBrightness) / (periodOfBeat / 2)
+        brightness = slope * timeIntoBeat + 2 * peakBrightness
+    return int(math.floor(brightness))
+
+
+# input -> state
+# state + ts -> new state
+# new state -> draws it
