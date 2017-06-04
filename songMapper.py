@@ -68,11 +68,19 @@ def piecewiseBrightness(songQualities, t):
     if (timeIntoBeat < periodOfBeat / 2):
         slope = (peakBrightness - minBrightness) / (periodOfBeat / 2)
         brightness = slope * timeIntoBeat
-        print ('..going up. brightness:', brightness)
+        print ('...going UP')
+        print ('...brightness:', brightness)
+        print ('...slope:', slope)
+        print ('...t_beat:', timeIntoBeat)
+        print ('...T_beat:', periodOfBeat)
     else:
         slope = (minBrightness - peakBrightness) / (periodOfBeat / 2)
         brightness = slope * timeIntoBeat + 2 * peakBrightness
-        print ('going down. brightness:', brightness)
+        print ('...going DOWN')
+        print ('...brightness:', brightness)
+        print ('...slope:', slope)
+        print ('...t_beat:', timeIntoBeat)
+        print ('...T_beat:', periodOfBeat)
     return int(math.floor(brightness))
 
 
