@@ -79,6 +79,32 @@ def piecewiseBrightness(songQualities, t):
         brightness = slope * timeIntoBeat + intercept
     return int(math.floor(brightness))
 
+# xValues is an array of positions for which a hue-value will be generated
+def generateColors(songQualities, t, xValues):
+    bpm = songQualities['tempo'] # float bpm
+    timeSignature = songQualities['time_signature'] # int beats / bar
+    cheeriness = songQualities['valence'] # 0-1f
+    key = songQualities['key'] # int representing half-steps
+    energy = songQualities['energy'] # 0-1f
+    danciness = songQualities['danceability'] # 0-1f
+
+    bpm = songQualities['tempo'] # float bpm
+    timeSignature = songQualities['time_signature'] # int beats / bar
+    periodOfMeasure = 60.0 * timeSignature / bpm
+    w = 2 * math.pi / periodOfMeasure
+
+    points = map(lambda x : {'x':x, 't':t, 'w':w}, xValues)
+    hues = map(standingWave, points)
+
+    return hues
+
+def standingWave(point):
+    x = point['x']
+    t = point['t']
+    angularFreq = point['w']
+    multiplier = 360
+    y = (2 * multiplier * math.cos(x) * math.cos(t * angularFreq)) % 360
+    return y
 
 # input -> state
 # state + ts -> new state

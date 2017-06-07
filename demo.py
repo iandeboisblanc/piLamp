@@ -2,9 +2,10 @@ import time
 import os
 import requests
 import sys
+import math
 from neopixel import *
 from ConfigParser import SafeConfigParser
-from songMapper import generatePattern, piecewiseBrightness
+from songMapper import generateColors, piecewiseBrightness
 from apiTest import generateSpotifyToken, getMostRecentSong, getSongQualities
 
 parser = SafeConfigParser()
@@ -30,6 +31,10 @@ def colorWipe(strip, color, wait_ms=50):
         strip.show()
         time.sleep(wait_ms/1000.0)
 
+def setColors(strip, colors):
+    for i in range(strip.numPixels()):
+        strip.setPixelColor(i, colors[i])
+
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         username = sys.argv[1]
@@ -51,10 +56,13 @@ if __name__ == '__main__':
     print ('Energy:', qualities['energy'])
 
     colorWipe(strip, Color(255, 0, 0))
+    xValues = map(lambda x: 2 * math.pi * x / LED_COUNT, range(0, LED_COUNT))
     while True:
         # state = generatePattern(qualities, time.time())
         # print ('brightness:', state['brightness'])
         brightness = piecewiseBrightness(qualities, time.time())
         print ('brightness:', brightness)
         strip.setBrightness(brightness)
+        colors = generateColors()
+        setColors(strip, colors)
         strip.show()
