@@ -95,9 +95,13 @@ def generateColors(songQualities, t, xValues):
     w = 2 * math.pi / periodOfMeasure
 
     points = map(lambda x : {'x':x, 't':t, 'w':w}, xValues)
+    print ('points', points)
     hues = map(standingWave, points)
+    print ('hues', hues)
     unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , hues)
+    print ('rgbs', unitRgbs)
     scaledRgbs = map(lambda rgb: rgb * 255, unitRgbs)
+    print ('rgbVals', scaledRgbs)
     return scaledRgbs
 
 def standingWave(point):
