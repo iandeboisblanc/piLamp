@@ -33,9 +33,7 @@ def colorWipe(strip, color, wait_ms=50):
 
 def setColors(strip, colors):
     for i in range(strip.numPixels()):
-        print ('starting with', colors[i])
         color = Color(*colors[i])
-
         strip.setPixelColor(i, color)
 
 if __name__ == '__main__':
@@ -60,12 +58,11 @@ if __name__ == '__main__':
 
     colorWipe(strip, Color(255, 0, 0))
     xValues = map(lambda x: 2.0 * math.pi * x / LED_COUNT, range(0, LED_COUNT))
-    print ('XVALUES:', xValues)
     while True:
         # state = generatePattern(qualities, time.time())
         # print ('brightness:', state['brightness'])
         brightness = piecewiseBrightness(qualities, time.time())
-        print ('brightness:', brightness)
+        # print ('brightness:', brightness)
         strip.setBrightness(brightness)
         colors = generateColors(qualities, time.time(), xValues)
         setColors(strip, colors)

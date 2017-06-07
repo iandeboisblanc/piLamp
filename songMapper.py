@@ -92,16 +92,23 @@ def generateColors(songQualities, t, xValues):
     bpm = songQualities['tempo'] # float bpm
     timeSignature = songQualities['time_signature'] # int beats / bar
     periodOfMeasure = 60.0 * timeSignature / bpm
-    w = 2 * math.pi / periodOfMeasure
 
-    points = map(lambda x : {'x':x, 't':t, 'w':w}, xValues)
-    print ('points', points)
+    # wave frequency should be lower for lower energy
+    waveFreq = 2 * math.pi / periodOfMeasure * energy
+
+    # scalar => intensity of wave, based on danciness
+    scalar = danciness
+
+    points = map(lambda x : {'x':x, 't':t, 'w':waveFreq, 's':scalar}, xValues)
     hues = map(standingWave, points)
-    print ('hues', hues)
+
+    # phase shift => more towards blues, based on cheeriness
+    shiftedHues = map(lambda h : (h + (1/6.0) - (1.0 - cheeriness) / 2.0) % 1.0 , hues)
+
     unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , hues)
-    print ('rgbs', unitRgbs)
-    scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor((c * 255)) % 256), rgb), unitRgbs)
-    print ('rgbVals', scaledRgbs)
+    scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor(c * 255)), rgb), unitRgbs)
+    # print ('hues', hues)
+    # print ('rgbVals', scaledRgbs)
     return scaledRgbs
 
 def standingWave(point):
