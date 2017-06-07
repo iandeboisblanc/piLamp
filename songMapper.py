@@ -2,48 +2,11 @@ import math
 import colorsys
 # https://developer.spotify.com/web-api/get-audio-features/
 
-def generatePattern(songQualities, t):
-    bpm = songQualities['tempo'] # float bpm
-    timeSignature = songQualities['time_signature'] # int beats / bar
-    cheeriness = songQualities['valence'] # 0-1f
-    key = songQualities['key'] # int representing half-steps
-    energy = songQualities['energy'] # 0-1f
-    danciness = songQualities['danceability'] # 0-1f
-    # something => number of colors at one time
-    # something => color change rate (aka color distance traveled per tick) (or tied to bpm?)
-
-
-
-    # Pulse lights to bpm, with larger pulses every timeSignature
-    # energy to determine intesity of pulsing (amplitude), or sharpness (sawtooth wave)
-    # danciness to determine breadth of color range
-    # cheeriness to determine base color scheme
-
-
-    # Could represent as a series of sine functions added together (Fourier series)
-    # Wave-length is fixed > 16 LEDs should be considered continuous, and thus must
-    # represent a full wave-length (2n*pi) distance.
-    # A separate or layered wave-function can be used for brightness.
-    # Amplitude of wave can be mapped to color (should use HSV 0 - 360 deg)
-
-    # For period of 1:
-    # f(w,t) = A + B*sin(2pi*wt) + C*sin(2pi*2wt) + D*sin(2pi*3wt)
-    #   + E*cos(2pi*wt) + F*cos(2pi*2wt) + G*cos(2pi*3wt)
-
-    #  w => phase (radians), t => time (s)
-
-    # For brightness, all LEDs should probably have same w (flash concurrently):
-    # f(t) = A + B*sin(2pi*t*(bpm/60)) + C*sin(2pi*t*(bpm/60)/timeSignature)
-
-    pi = math.pi
-    sin = math.sin
-    avgBrightness = 3.0
-    # brightness = midValue + Wave(period = beat) + Wave(period = measure)
-    brightness = avgBrightness + (energy) * sin(2.0*pi*t*bpm/60.0) + (energy) * sin(2.0*pi*t*bpm/timeSignature/60.0)
-    state = {
-        'brightness': int(math.floor(brightness * 255.0/5.0))
-    }
-    return state
+### GAME PLAN: ###
+# Pulse lights to bpm, with larger pulses every timeSignature
+# energy to determine intesity of pulsing (amplitude), or sharpness (sawtooth wave)
+# danciness to determine breadth of color range
+# cheeriness to determine base color scheme
 
 def piecewiseBrightness(songQualities, t):
     bpm = songQualities['tempo'] # float bpm
@@ -112,8 +75,6 @@ def generateColors(songQualities, t, xValues):
 
     unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , hues)
     scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor(c * 255)), rgb), unitRgbs)
-    # print ('hues', hues)
-    # print ('rgbVals', scaledRgbs)
     return scaledRgbs
 
 def standingWave(point):
@@ -123,7 +84,3 @@ def standingWave(point):
     scalar = 1
     y = (2 * scalar * math.cos(x) * math.cos(t * angularFreq)) % 1
     return y
-
-# input -> state
-# state + ts -> new state
-# new state -> draws it
