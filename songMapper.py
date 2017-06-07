@@ -1,4 +1,5 @@
 import math
+import colorsys
 # https://developer.spotify.com/web-api/get-audio-features/
 
 def generatePattern(songQualities, t):
@@ -95,15 +96,16 @@ def generateColors(songQualities, t, xValues):
 
     points = map(lambda x : {'x':x, 't':t, 'w':w}, xValues)
     hues = map(standingWave, points)
-
-    return hues
+    unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , hues)
+    scaledRgbs = map(lambda rgb: rgb * 255, unitRgbs)
+    return scaledRgbs
 
 def standingWave(point):
     x = point['x']
     t = point['t']
     angularFreq = point['w']
-    multiplier = 360
-    y = (2 * multiplier * math.cos(x) * math.cos(t * angularFreq)) % 360
+    scalar = 1
+    y = (2 * scalar * math.cos(x) * math.cos(t * angularFreq)) % 1
     return y
 
 # input -> state
