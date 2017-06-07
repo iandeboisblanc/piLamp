@@ -100,7 +100,7 @@ def generateColors(songQualities, t, xValues):
     print ('hues', hues)
     unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , hues)
     print ('rgbs', unitRgbs)
-    scaledRgbs = map(lambda rgb: map(lambda c: (c * 255) % 256, rgb), unitRgbs)
+    scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor((c * 255)) % 256), rgb), unitRgbs)
     print ('rgbVals', scaledRgbs)
     return scaledRgbs
 
