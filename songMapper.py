@@ -56,6 +56,7 @@ def piecewiseBrightness(songQualities, t):
     timeIntoMeasure = t % periodOfMeasure
     timeIntoBeat = t % periodOfBeat
 
+    # TODO: increase intensity of brightness modulation
     normalBeatBrightness = 100.0 # Used for reference
     firstBeatMaxBrightness = 175.0
     normalBeatMinDelta = 20.0
@@ -94,9 +95,13 @@ def generateColors(songQualities, t, xValues):
     periodOfMeasure = 60.0 * timeSignature / bpm
 
     # wave frequency should be lower for lower energy
+    # TODO: map waveFreq to bpm-matching chunks
     waveFreq = 2 * math.pi / periodOfMeasure * energy
 
     # scalar => intensity of wave, based on danciness
+    # TODO consider reducing in order to tell difference better
+    # OR, consider having whole wave shift up and down over time to cover spectrum
+    # while the per-LED color difference is smaller at a given t
     scalar = danciness * danciness
 
     points = map(lambda x : {'x':x, 't':t, 'w':waveFreq, 's':scalar}, xValues)
