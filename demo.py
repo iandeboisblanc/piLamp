@@ -33,7 +33,10 @@ def colorWipe(strip, color, wait_ms=50):
 
 def setColors(strip, colors):
     for i in range(strip.numPixels()):
-        strip.setPixelColor(i, colors[i])
+        print ('starting with', colors[i])
+        color = Color(colors[i])
+
+        strip.setPixelColor(i, color)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
