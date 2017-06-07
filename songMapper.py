@@ -56,13 +56,13 @@ def piecewiseBrightness(songQualities, t):
     timeIntoMeasure = t % periodOfMeasure
     timeIntoBeat = t % periodOfBeat
 
-    normalBeatBrightness = 175.0 # Used for reference
-    firstBeatMaxBrightness = 255.0
+    normalBeatBrightness = 100.0 # Used for reference
+    firstBeatMaxBrightness = 175.0
     normalBeatMinDelta = 20.0
     firstBeatMinDelta = 50.0
 
     # 125.0 is arbitrary sizeable chunk for chilling on the downbeat
-    minBrightness = min(normalBeatBrightness - 125.0 * energy, normalBeatBrightness - normalBeatMinDelta)
+    minBrightness = min(normalBeatBrightness - 75.0 * energy, normalBeatBrightness - normalBeatMinDelta)
     # If in first beat of measure, generate larger output
     if (timeIntoMeasure < periodOfBeat):
         peakBrightness = max(normalBeatBrightness + (firstBeatMaxBrightness - normalBeatBrightness) * energy, minBrightness + firstBeatMinDelta)
@@ -97,7 +97,7 @@ def generateColors(songQualities, t, xValues):
     waveFreq = 2 * math.pi / periodOfMeasure * energy
 
     # scalar => intensity of wave, based on danciness
-    scalar = danciness
+    scalar = danciness * danciness
 
     points = map(lambda x : {'x':x, 't':t, 'w':waveFreq, 's':scalar}, xValues)
     hues = map(standingWave, points)

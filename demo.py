@@ -55,6 +55,8 @@ if __name__ == '__main__':
     print ('BPM:', qualities['tempo'])
     print ('Time Signature:', qualities['time_signature'])
     print ('Energy:', qualities['energy'])
+    print ('Cheeriness', qualities['valence'])
+    print ('Danciness', qualities['danceability'])
 
     colorWipe(strip, Color(255, 0, 0))
     xValues = map(lambda x: 2.0 * math.pi * x / LED_COUNT, range(0, LED_COUNT))
