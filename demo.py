@@ -63,6 +63,6 @@ if __name__ == '__main__':
         brightness = piecewiseBrightness(qualities, time.time())
         print ('brightness:', brightness)
         strip.setBrightness(brightness)
-        colors = generateColors()
+        colors = generateColors(qualities, time.time(), xValues)
         setColors(strip, colors)
         strip.show()
