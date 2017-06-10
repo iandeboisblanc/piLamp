@@ -5,7 +5,6 @@ from ConfigParser import SafeConfigParser
 import spotipy
 import spotipy.util as util
 import sys
-from songMapper import generatePattern
 
 parser = SafeConfigParser()
 parser.read('config.ini')
@@ -53,5 +52,4 @@ if __name__ == '__main__':
     qualities = getSongQualities(song['item']['id'])
     print qualities
     while True:
-        state = generatePattern(qualities, time.time())
         print(state)
