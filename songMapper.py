@@ -65,7 +65,7 @@ def generateColors(songQualities, t, xValues):
     # TODO consider reducing in order to tell difference better
     # OR, consider having whole wave shift up and down over time to cover spectrum
     # while the per-LED color difference is smaller at a given t
-    scalar = danciness * danciness
+    scalar = danciness * danciness / 10
 
     points = map(lambda x : {'x':x, 't':t, 'w':waveFreq, 's':scalar}, xValues)
     hues = map(standingWave, points)
