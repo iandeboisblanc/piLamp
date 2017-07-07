@@ -57,10 +57,10 @@ def generateColors(songQualities, t, xValues):
     timeSignature = songQualities['time_signature'] # int beats / bar
     periodOfMeasure = 60.0 * timeSignature / bpm
 
-    if energy > 0.5:
-        periodOfMeasure = periodOfMeasure / 2
     # wave frequency should be lower for lower energy, in chunks relative to bpm
     waveFreq = 2 * math.pi / periodOfMeasure * math.floor(10 * energy)
+    if energy > 0.5:
+        waveFreq = waveFreq / 2
 
     # scalar => intensity of wave, based on danciness
     # TODO consider reducing in order to tell difference better
