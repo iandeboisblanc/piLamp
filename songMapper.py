@@ -20,8 +20,8 @@ def piecewiseBrightness(songQualities, t):
     timeIntoBeat = t % periodOfBeat
 
     # TODO: increase intensity of brightness modulation
-    normalBeatBrightness = 100.0 # Used for reference
-    firstBeatMaxBrightness = 175.0
+    normalBeatBrightness = 75.0 # Used for reference
+    firstBeatMaxBrightness = 200.0
     normalBeatMinDelta = 20.0
     firstBeatMinDelta = 50.0
 
@@ -74,7 +74,7 @@ def generateColors(songQualities, t, xValues):
     shiftedHues = map(lambda h : (h + (1/6.0) - (1.0 - cheeriness) / 2.0) % 1.0 , hues)
 
     # add wave movement over time
-    moreShiftedHues = map(lambda h : h + danciness * danciness * math.sin(t * waveFreq / 10), shiftedHues)
+    moreShiftedHues = map(lambda h : h + danciness * danciness * math.sin(t * waveFreq / 10) % 1.0, shiftedHues)
 
     unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , moreShiftedHues)
     scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor(c * 255)), rgb), unitRgbs)
