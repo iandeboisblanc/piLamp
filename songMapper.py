@@ -59,8 +59,8 @@ def generateColors(songQualities, t, xValues):
 
     # wave frequency should be lower for lower energy, in chunks relative to bpm
     waveFreq = 2 * math.pi / periodOfMeasure * math.floor(10 * energy)
-    if energy > 0.5:
-        waveFreq = waveFreq / 2
+    if energy < 0.5:
+        waveFreq = waveFreq / 4
 
     # scalar => intensity of wave, based on danciness
     # TODO consider reducing in order to tell difference better
