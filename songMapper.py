@@ -84,5 +84,6 @@ def standingWave(point):
     x = point['x']
     t = point['t']
     angularFreq = point['w']
+    scalar = point['s']
     y = (2 * scalar * math.sin(x) * math.cos(t * angularFreq)) % 1
     return y
