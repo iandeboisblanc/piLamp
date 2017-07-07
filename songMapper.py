@@ -57,8 +57,9 @@ def generateColors(songQualities, t, xValues):
     timeSignature = songQualities['time_signature'] # int beats / bar
     periodOfMeasure = 60.0 * timeSignature / bpm
 
-    # wave frequency should be lower for lower energy
-    # TODO: map waveFreq to bpm-matching chunks
+    if energy > 0.5:
+        periodOfMeasure = periodOfMeasure / 2
+    # wave frequency should be lower for lower energy, in chunks relative to bpm
     waveFreq = 2 * math.pi / periodOfMeasure * math.floor(10 * energy)
 
     # scalar => intensity of wave, based on danciness
@@ -74,7 +75,7 @@ def generateColors(songQualities, t, xValues):
     shiftedHues = map(lambda h : (h + (1/6.0) - (1.0 - cheeriness) / 2.0) % 1.0 , hues)
 
     # add wave movement over time
-    moreShiftedHues = map(lambda h : h + danciness * danciness * math.sin(t * waveFreq / 10) % 1.0, shiftedHues)
+    moreShiftedHues = map(lambda h : h + danciness * cheeriness * math.sin(t * waveFreq / 10) % 1.0, shiftedHues)
 
     unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , moreShiftedHues)
     scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor(c * 255)), rgb), unitRgbs)
