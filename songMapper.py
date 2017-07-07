@@ -59,13 +59,13 @@ def generateColors(songQualities, t, xValues):
 
     # wave frequency should be lower for lower energy
     # TODO: map waveFreq to bpm-matching chunks
-    waveFreq = 2 * math.pi / periodOfMeasure * energy
+    waveFreq = 2 * math.pi / periodOfMeasure * math.floor(10 * energy)
 
     # scalar => intensity of wave, based on danciness
     # TODO consider reducing in order to tell difference better
     # OR, consider having whole wave shift up and down over time to cover spectrum
     # while the per-LED color difference is smaller at a given t
-    scalar = danciness * danciness / 10
+    scalar = danciness * danciness * 0.2
 
     points = map(lambda x : {'x':x, 't':t, 'w':waveFreq, 's':scalar}, xValues)
     hues = map(standingWave, points)
@@ -73,7 +73,10 @@ def generateColors(songQualities, t, xValues):
     # phase shift => more towards blues, based on cheeriness
     shiftedHues = map(lambda h : (h + (1/6.0) - (1.0 - cheeriness) / 2.0) % 1.0 , hues)
 
-    unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , hues)
+    # add wave movement over time
+    moreShiftedHues = map(lambda h : h + danciness * danciness * math.sin(t * waveFreq / 10))
+
+    unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , shiftedHues)
     scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor(c * 255)), rgb), unitRgbs)
     return scaledRgbs
 
@@ -81,6 +84,5 @@ def standingWave(point):
     x = point['x']
     t = point['t']
     angularFreq = point['w']
-    scalar = 1
-    y = (2 * scalar * math.cos(x) * math.cos(t * angularFreq)) % 1
+    y = (2 * scalar * math.sin(x) * math.cos(t * angularFreq)) % 1
     return y
