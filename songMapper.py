@@ -63,7 +63,7 @@ def generateColors(songQualities, t, xValues):
     # exagerate effect:
     if energy < 0.5:
         waveFreq = waveFreq / 2
-    if energy < 0.2.5:
+    if energy < 0.25:
         waveFreq = waveFreq / 2
 
     # scalar => factor for amplitude of wave, based on danciness
