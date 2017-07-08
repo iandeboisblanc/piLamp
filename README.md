@@ -9,3 +9,6 @@ However, during the `python setup.py install` step, replace `python` with the pa
 ```
 ../../piLamp/[env]/bin/python3 setup.py install
 ```
+
+## Other stuff
+If the lights are flashy, you may need to [disable the pi sound card.](http://www.instructables.com/id/Disable-the-Built-in-Sound-Card-of-Raspberry-Pi/)

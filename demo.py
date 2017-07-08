@@ -64,9 +64,9 @@ if __name__ == '__main__':
     xValues = map(lambda x: 2.0 * math.pi * x / LED_COUNT, range(0, LED_COUNT))
     while True:
         # state = generatePattern(qualities, time.time())
-        # print ('brightness:', state['brightness'])
+        # print('brightness:', state['brightness'])
         brightness = piecewiseBrightness(qualities, time.time())
-        # print ('brightness:', brightness)
+        # print('brightness:', brightness)
         strip.setBrightness(brightness)
         colors = generateColors(qualities, time.time(), xValues)
         setColors(strip, colors)

@@ -21,7 +21,7 @@ def generateSpotifyToken(username, clientId, clientSecret, referringUrl):
     if token:
         return token
     else:
-        print "Can't get token for", username
+        print("Can't get token for", username)
 
 def getMostRecentSong(token):
     headers = {
@@ -40,16 +40,16 @@ def getSongQualities(token, id):
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         username = sys.argv[1]
-        print ('Press Ctrl-C to quit.')
+        print('Press Ctrl-C to quit.')
     else:
-        print ("Usage: %s 'spotify username'" % (sys.argv[0],))
+        print("Usage: %s 'spotify username'" % (sys.argv[0],))
         sys.exit()
 
     token = generateSpotifyToken(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
     song = getMostRecentSong(token)
-    print ('Checking for currently playing song...')
+    print('Checking for currently playing song...')
     # if song['is_playing']:
     qualities = getSongQualities(song['item']['id'])
-    print qualities
+    print(qualities)
     while True:
         print(state)
