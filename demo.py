@@ -4,11 +4,11 @@ import requests
 import sys
 import math
 from neopixel import *
-from ConfigParser import SafeConfigParser
+from configparser import ConfigParser
 from songMapper import generateColors, piecewiseBrightness
 from apiTest import generateSpotifyToken, getMostRecentSong, getSongQualities
 
-parser = SafeConfigParser()
+parser = ConfigParser()
 parser.read('config.ini')
 
 # Strip Config:
@@ -39,24 +39,24 @@ def setColors(strip, colors):
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         username = sys.argv[1]
-        print ('Press Ctrl-C to quit.')
+        print('Press Ctrl-C to quit.')
     else:
-        print ("Usage: %s 'spotify username'" % (sys.argv[0],))
+        print("Usage: %s 'spotify username'" % (sys.argv[0],))
         sys.exit()
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     strip.begin()
 
     token = generateSpotifyToken(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
-    print ('Checking for currently playing song...')
+    print('Checking for currently playing song...')
     song = getMostRecentSong(token)
-    print ('Playing:', song['item']['name'])
+    print('Playing:', song['item']['name'])
     # if song['is_playing']:
     qualities = getSongQualities(token, song['item']['id'])
-    print ('BPM:', qualities['tempo'])
-    print ('Time Signature:', qualities['time_signature'])
-    print ('Energy:', qualities['energy'])
-    print ('Cheeriness', qualities['valence'])
-    print ('Danciness', qualities['danceability'])
+    print('BPM:', qualities['tempo'])
+    print('Time Signature:', qualities['time_signature'])
+    print('Energy:', qualities['energy'])
+    print('Cheeriness', qualities['valence'])
+    print('Danciness', qualities['danceability'])
 
     print('color about to be wiped.')
     colorWipe(strip, Color(255, 0, 0))

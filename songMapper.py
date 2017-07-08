@@ -45,6 +45,7 @@ def piecewiseBrightness(songQualities, t):
     return int(math.floor(brightness))
 
 # xValues is an array of positions for which a hue-value will be generated
+# (wave has expected length of 2pi)
 def generateColors(songQualities, t, xValues):
     bpm = songQualities['tempo'] # float bpm
     timeSignature = songQualities['time_signature'] # int beats / bar
@@ -59,22 +60,22 @@ def generateColors(songQualities, t, xValues):
 
     # wave frequency should be lower for lower energy, in chunks relative to bpm
     waveFreq = 2 * math.pi / periodOfMeasure * math.floor(10 * energy)
+    # exagerate effect:
     if energy < 0.5:
-        waveFreq = waveFreq / 4
+        waveFreq = waveFreq / 2
+    if energy < 0.2.5:
+        waveFreq = waveFreq / 2
 
-    # scalar => intensity of wave, based on danciness
-    # TODO consider reducing in order to tell difference better
-    # OR, consider having whole wave shift up and down over time to cover spectrum
-    # while the per-LED color difference is smaller at a given t
+    # scalar => factor for amplitude of wave, based on danciness
     scalar = danciness * danciness * 0.2
 
     points = map(lambda x : {'x':x, 't':t, 'w':waveFreq, 's':scalar}, xValues)
     hues = map(standingWave, points)
 
-    # phase shift => more towards blues, based on cheeriness
+    # Constant amplitude shift => more towards blues, based on cheeriness
     shiftedHues = map(lambda h : (h + (1/6.0) - (1.0 - cheeriness) / 2.0) % 1.0 , hues)
 
-    # add wave movement over time
+    # Time-dependent amplitude shift over a longer period of time to give added motion
     moreShiftedHues = map(lambda h : h + danciness * cheeriness * math.sin(t * waveFreq / 10) % 1.0, shiftedHues)
 
     unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , moreShiftedHues)
