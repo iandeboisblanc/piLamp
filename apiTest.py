@@ -1,12 +1,12 @@
 import time
 import os
 import requests
-from ConfigParser import SafeConfigParser
+from configparser import ConfigParser
 import spotipy
 import spotipy.util as util
 import sys
 
-parser = SafeConfigParser()
+parser = ConfigParser()
 parser.read('config.ini')
 
 # Network Config:
