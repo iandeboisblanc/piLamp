@@ -28,6 +28,8 @@ def getMostRecentSong(token):
         'Authorization': 'Bearer {}'.format(token)
     }
     r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers)
+    if r.status_code == 204:
+        return
     return r.json()
 
 def getSongQualities(token, id):

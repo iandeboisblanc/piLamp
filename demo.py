@@ -32,8 +32,8 @@ def colorWipe(strip, color, wait_ms=50):
         time.sleep(wait_ms/1000.0)
 
 def setColors(strip, colors):
-    print('COLOR LENGTH:')
-    print(len(colors))
+    if len(colors) < strip.numPixels():
+        return
     for i in range(strip.numPixels()):
         color = Color(*colors[i])
         strip.setPixelColor(i, color)
