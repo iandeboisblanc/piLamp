@@ -28,6 +28,7 @@ def getMostRecentSong(token):
         'Authorization': 'Bearer {}'.format(token)
     }
     r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers)
+    print(r)
     return r.json()
 
 def getSongQualities(token, id):
