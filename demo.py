@@ -63,7 +63,8 @@ if __name__ == '__main__':
     print('color about to be wiped.')
     colorWipe(strip, Color(255, 0, 0))
     print('color wiped.')
-    xValues = map(lambda x: 2.0 * math.pi * x / LED_COUNT, range(0, LED_COUNT))
+    # xValues = map(lambda x: 2.0 * math.pi * x / LED_COUNT, range(0, LED_COUNT))
+    xValues = [2.0 * math.pi * x / LED_COUNT for x in range(0, LED_COUNT)]
     while True:
         # state = generatePattern(qualities, time.time())
         # print('brightness:', state['brightness'])
