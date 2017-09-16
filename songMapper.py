@@ -80,7 +80,7 @@ def generateColors(songQualities, t, xValues):
 
     unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , moreShiftedHues)
     scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor(c * 255)), rgb), unitRgbs)
-    return scaledRgbs
+    return list(scaledRgbs)
 
 def standingWave(point):
     x = point['x']
