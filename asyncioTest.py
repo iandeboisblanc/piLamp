@@ -1,10 +1,11 @@
-import time
-import os
+# import os
 import requests
-from configparser import ConfigParser
+import sys
+import asyncio
+import functools
 import spotipy
 import spotipy.util as util
-import sys
+from configparser import ConfigParser
 
 parser = ConfigParser()
 parser.read('config.ini')
@@ -14,7 +15,6 @@ SPOTIFY_CLIENT_ID = parser.get('apis', 'spotify_client_id')
 SPOTIFY_CLIENT_SECRET = parser.get('apis', 'spotify_client_secret')
 SPOTIFY_REDIRECT_URL = parser.get('apis', 'spotify_redirect_url')
 
-# Request Methods:
 def generateSpotifyToken(username, clientId, clientSecret, referringUrl):
     scope = 'user-read-currently-playing'
     token = util.prompt_for_user_token(username, scope, clientId, clientSecret, referringUrl)
@@ -23,20 +23,20 @@ def generateSpotifyToken(username, clientId, clientSecret, referringUrl):
     else:
         print("Can't get token for", username)
 
-def getMostRecentSong(token):
+async def checkForNewSong(token):
     headers = {
         'Authorization': 'Bearer {}'.format(token)
     }
     r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers)
     # TODO: Sometimes get a 204 with no content. Causes error on .json()
-    return r.json()
+    await asyncio.sleep(3)
+    return 'BLAHHHH'  # r.json()
 
-def getSongQualities(token, id):
-    headers = {
-        'Authorization': 'Bearer {}'.format(token)
-    }
-    r = requests.get('https://api.spotify.com/v1/audio-features/{}'.format(id), headers=headers)
-    return r.json()
+async def main(token):
+    while True:
+        words = await checkForNewSong(token)
+        print(words)
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -47,10 +47,6 @@ if __name__ == '__main__':
         sys.exit()
 
     token = generateSpotifyToken(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
-    song = getMostRecentSong(token)
-    print('Checking for currently playing song...')
-    # if song['is_playing']:
-    qualities = getSongQualities(song['item']['id'])
-    print(qualities)
-    while True:
-        print(state)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main(token))
+    loop.close()
