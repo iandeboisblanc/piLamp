@@ -69,18 +69,25 @@ def generateColors(songQualities, t, xValues):
     # scalar => factor for amplitude of wave, based on danciness
     scalar = danciness * danciness * 0.2
 
-    points = map(lambda x : {'x':x, 't':t, 'w':waveFreq, 's':scalar}, xValues)
-    hues = map(standingWave, points)
+    # points = map(lambda x : {'x':x, 't':t, 'w':waveFreq, 's':scalar}, xValues)
+    points = [{'x':x, 't':t, 'w':waveFreq, 's':scalar} for x in xValues ]
+
+    # hues = map(standingWave, points)
+    hues = [standingWave(p) for p in points]
 
     # Constant amplitude shift => more towards blues, based on cheeriness
-    shiftedHues = map(lambda h : (h + (1/6.0) - (1.0 - cheeriness) / 2.0) % 1.0 , hues)
+    # shiftedHues = map(lambda h : (h + (1/6.0) - (1.0 - cheeriness) / 2.0) % 1.0 , hues)
+    shiftedHues = [(h + (1/6.0) - (1.0 - cheeriness) / 2.0) % 1.0 for h in hues]
 
     # Time-dependent amplitude shift over a longer period of time to give added motion
-    moreShiftedHues = map(lambda h : h + danciness * cheeriness * math.sin(t * waveFreq / 10) % 1.0, shiftedHues)
+    # moreShiftedHues = map(lambda h : h + danciness * cheeriness * math.sin(t * waveFreq / 10) % 1.0, shiftedHues)
+    moreShiftedHues = [h + danciness * cheeriness * math.sin(t * waveFreq / 10) % 1.0 for h in shiftedHues]
 
-    unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , moreShiftedHues)
-    scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor(c * 255)), rgb), unitRgbs)
-    return list(scaledRgbs)
+    # unitRgbs = map(lambda hue: colorsys.hsv_to_rgb(hue, 1.0, 1.0) , moreShiftedHues)
+    unitRgbs = [colorsys.hsv_to_rgb(hue, 1.0, 1.0) for hue in moreShiftedHues]
+    # scaledRgbs = map(lambda rgb: map(lambda c: int(math.floor(c * 255)), rgb), unitRgbs)
+    scaledRgbs = [[int(math.floor(c * 255)) for c in rgb] for rgb in unitRgbs]
+    return scaledRgbs
 
 def standingWave(point):
     x = point['x']
