@@ -26,21 +26,22 @@ class apiThread(threading.Thread):
     def run(self):
         global songQualities
         currentSongId = 'FAKE SHIT!'
-        while True:
-            print('Checking for new song...')
-            song = self.api.getCurrentSong()
-            newSongId = song['item']['id']
-            if newSongId != self.currentSongId:
-                print('New Song!')
-                self.currentSongId = newSongId
-                # print(songQualities)
-                print('API THREAD start fetch')
-                temp = self.api.getSongQualities(newSongId)
-                print('API THEAD done fetch')
-                print(temp)
-                songQualities = temp
-                print(songQualities)
-            time.sleep(1)
+        try:
+            while True:
+                print('Checking for new song...')
+                song = self.api.getCurrentSong()
+                newSongId = song['item']['id']
+                if newSongId != self.currentSongId:
+                    print('New Song!')
+                    self.currentSongId = newSongId
+                    songQualities = self.api.getSongQualities(newSongId)
+                    print(songQualities)
+                time.sleep(1)
+        except Exception as err:
+            print('Error in LED thread:')
+            print(sys.exc_info())
+            print(err)
+
 
 class ledThread(threading.Thread):
     def __init__(self):
@@ -55,13 +56,16 @@ class ledThread(threading.Thread):
                     # print('no q')
                     a = None
                     # self.leds.colorWipe([255, 0, 0])
+                    print('done if')
                 else:
                     print('LED thread found qualities')
                     print(songQualities)
                     self.leds.mapSongQualitiesToBrightness(songQualities)
                     self.leds.mapSongQualitiesToColors(songQualities)
+                    print('done else')
                     # print(songQualities)
         except Exception as err:
+            print('Error in LED thread:')
             print(sys.exc_info())
             print(err)
 
