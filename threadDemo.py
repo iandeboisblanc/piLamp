@@ -6,6 +6,7 @@ import time
 from configparser import ConfigParser
 from songMapper import generateColors, piecewiseBrightness
 from SpotifyApiClient import SpotifyApiClient
+from NeoPixelController import NeoPixelController
 
 parser = ConfigParser()
 parser.read('config.ini')
