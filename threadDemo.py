@@ -46,13 +46,13 @@ class ledThread(threading.Thread):
     def run(self):
         global songQualities
         while True:
+            self.leds.colorWipe([255, 0, 0])
             if not songQualities:
                 print('no q')
-                self.leds.colorWipe([255, 0, 0])
             else:
                 print('yes q')
-                self.leds.mapSongQualitiesToBrightness(songQualities)
-                self.leds.mapSongQualitiesToColors(songQualities)
+                # self.leds.mapSongQualitiesToBrightness(songQualities)
+                # self.leds.mapSongQualitiesToColors(songQualities)
                 # print(songQualities)
 
 if __name__ == '__main__':
