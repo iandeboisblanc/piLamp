@@ -38,9 +38,8 @@ class apiThread(threading.Thread):
                     print(songQualities)
                 time.sleep(1)
         except Exception as err:
-            print('Error in LED thread:')
-            print(sys.exc_info())
-            print(err)
+            print('Error in API thread: {}'.format(err))
+            # print(sys.exc_info())
 
 
 class ledThread(threading.Thread):
@@ -53,21 +52,14 @@ class ledThread(threading.Thread):
         try:
             while True:
                 if not songQualities:
-                    # print('no q')
-                    a = None
                     self.leds.colorWipe([255, 0, 0])
-                    print('done if')
                 else:
-                    print('LED thread found qualities')
-                    print(songQualities)
+                    # print(songQualities)
                     self.leds.mapSongQualitiesToBrightness(songQualities)
                     self.leds.mapSongQualitiesToColors(songQualities)
-                    print('done else')
-                    # print(songQualities)
         except Exception as err:
-            print('Error in LED thread:')
-            print(sys.exc_info())
-            print(err)
+            print('Error in LED thread: {}'.format(err))
+            # print(sys.exc_info())
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
