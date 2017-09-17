@@ -38,11 +38,15 @@ class NeoPixelController:
 
     def colorWipe(self, colors, wait_ms=50):
         print('wipe')
-        color = Color(colors[0], colors[1], colors[2])
-        for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, color)
-            self.strip.show()
-            time.sleep(wait_ms/1000.0)
+        try:
+            color = Color(colors[0], colors[1], colors[2])
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(i, color)
+                self.strip.show()
+                time.sleep(wait_ms/1000.0)
+        except error:
+            print('wipe error')
+            print(error)
 
     def mapSongQualitiesToColors(self, songQualities):
         bpm = songQualities['tempo'] # float bpm
