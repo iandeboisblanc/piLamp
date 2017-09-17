@@ -39,10 +39,15 @@ class NeoPixelController:
     def colorWipe(self, colors, wait_ms=50):
         print('wipe')
         color = Color(colors[0], colors[1], colors[2])
+        print('set color')
+        print(self.strip.numPixels())
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
+            print('set position {}'.format(i))
             self.strip.show()
+            print('showed')
             time.sleep(wait_ms/1000.0)
+        print('done wipe')
 
     def mapSongQualitiesToColors(self, songQualities):
         t = time.time()

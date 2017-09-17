@@ -55,7 +55,7 @@ class ledThread(threading.Thread):
                 if not songQualities:
                     # print('no q')
                     a = None
-                    # self.leds.colorWipe([255, 0, 0])
+                    self.leds.colorWipe([255, 0, 0])
                     print('done if')
                 else:
                     print('LED thread found qualities')
