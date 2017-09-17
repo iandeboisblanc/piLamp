@@ -36,7 +36,7 @@ class apiThread(threading.Thread):
                     self.currentSongId = newSongId
                     songQualities = self.api.getSongQualities(newSongId)
                     print(songQualities)
-                time.sleep(1)
+                time.sleep(2)
         except Exception as err:
             print('Error in API thread: {}'.format(err))
             # print(sys.exc_info())
