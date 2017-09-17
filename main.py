@@ -24,42 +24,60 @@ class apiThread(threading.Thread):
         self.currentSongId = ''
 
     def run(self):
-        global songQualities
-        currentSongId = 'FAKE SHIT!'
         try:
             while True:
-                print('Checking for new song...')
-                song = self.api.getCurrentSong()
-                newSongId = song['item']['id']
-                if newSongId != self.currentSongId:
-                    print('New Song!')
-                    self.currentSongId = newSongId
-                    songQualities = self.api.getSongQualities(newSongId)
-                    print(songQualities)
-                time.sleep(2)
+                self.loop()
         except Exception as err:
             print('Error in API thread: {}'.format(err))
             # print(sys.exc_info())
 
+    def loop(self):
+        global songQualities
+        print('Checking for new song...')
+        song = self.api.getCurrentSong()
+        newSongId = song['item']['id']
+        if newSongId != self.currentSongId:
+            print('New Song!')
+            self.currentSongId = newSongId
+            songQualities = self.api.getSongQualities(newSongId)
+            print(songQualities)
+        time.sleep(2)
+
 
 class ledThread(threading.Thread):
     def __init__(self):
+        global songQualities
         threading.Thread.__init__(self)
+        self.state = 'idle'
         self.leds = NeoPixelController()
 
     def run(self):
-        global songQualities
         try:
             while True:
-                if not songQualities:
-                    self.leds.colorWipe([255, 0, 0])
-                else:
-                    # print(songQualities)
-                    self.leds.mapSongQualitiesToBrightness(songQualities)
-                    self.leds.mapSongQualitiesToColors(songQualities)
+                self.loop()
         except Exception as err:
             print('Error in LED thread: {}'.format(err))
             # print(sys.exc_info())
+
+    def loop(self):
+        global songQualities
+        if not songQualities:
+            self.leds.colorWipe([255, 0, 0])
+            a = None
+        else:
+            print(songQualities)
+            self.leds.mapSongQualitiesToBrightness(songQualities)
+            self.leds.mapSongQualitiesToColors(songQualities)
+
+        # global songQualities
+        # if !songQualities:
+            # newState = 'idle'
+        # if songQualities:
+            # newState = 'viz'
+        # if newState != self.state:
+            # newState = 'waiting'
+        # self.state = newState
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -69,7 +87,6 @@ if __name__ == '__main__':
         print("Usage: %s 'spotify username'" % (sys.argv[0],))
         sys.exit()
 
-    # token = generateSpotifyToken(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
     thread1 = apiThread()
     thread2 = ledThread()
 
