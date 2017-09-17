@@ -13,7 +13,7 @@ class SpotifyApiClient:
         else:
             print("Can't get token for", username)
 
-    async def getCurrentSong(self):
+    def getCurrentSong(self):
         headers = {
         'Authorization': 'Bearer {}'.format(self.token)
         }
@@ -21,7 +21,7 @@ class SpotifyApiClient:
         # TODO: Sometimes get a 204 with no content. Causes error on .json()
         return r.json()
 
-    async def getSongQualities(self, songId):
+    def getSongQualities(self, songId):
         headers = {
         'Authorization': 'Bearer {}'.format(self.token)
         }
