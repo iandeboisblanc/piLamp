@@ -15,15 +15,17 @@ class SpotifyApiClient:
 
     def getCurrentSong(self):
         headers = {
-        'Authorization': 'Bearer {}'.format(self.token)
+            'Authorization': 'Bearer {}'.format(self.token)
         }
         r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers)
         # TODO: Sometimes get a 204 with no content. Causes error on .json()
         return r.json()
 
     def getSongQualities(self, songId):
+        print('start fetch')
         headers = {
-        'Authorization': 'Bearer {}'.format(self.token)
+            'Authorization': 'Bearer {}'.format(self.token)
         }
         r = requests.get('https://api.spotify.com/v1/audio-features/{}'.format(songId), headers=headers)
+        print('end fetch')
         return r.json()

@@ -33,8 +33,9 @@ class apiThread(threading.Thread):
             if newSongId != self.currentSongId:
                 print('New Song!')
                 self.currentSongId = newSongId
-                songQualities = self.api.getSongQualities(newSongId)
                 print('got new song qualities')
+                print(songQualities)
+                songQualities = self.api.getSongQualities(newSongId)
                 print(songQualities)
             time.sleep(1)
 
