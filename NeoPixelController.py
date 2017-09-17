@@ -42,11 +42,8 @@ class NeoPixelController:
         print('set color')
         print(self.strip.numPixels())
         for i in range(self.strip.numPixels()):
-            try:
-                self.strip.setPixelColor(i, color)
-            except Exception as err:
-                print('err: {}'.format(err))
-            print('err')
+            print('in for loop with index {}'.format(i))
+            self.strip.setPixelColor(i, color)
             print('set position {}'.format(i))
             self.strip.show()
             print('showed')
