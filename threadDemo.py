@@ -1,10 +1,7 @@
-import requests
 import sys
-# import asyncio
 import threading
 import time
 from configparser import ConfigParser
-from songMapper import generateColors, piecewiseBrightness
 from SpotifyApiClient import SpotifyApiClient
 from NeoPixelController import NeoPixelController
 
@@ -29,19 +26,17 @@ class apiThread(threading.Thread):
     def run(self):
         global songQualities
         currentSongId = 'FAKE SHIT!'
-        try:
-            while True:
-                print('Checking for new song...')
-                song = self.api.getCurrentSong()
-                newSongId = song['item']['id']
-                if newSongId != self.currentSongId:
-                    print('New Song!')
-                    self.currentSongId = newSongId
-                    songQualities = self.api.getSongQualities(newSongId)
-                time.sleep(1)
-        except error:
-            print('Error in led thread:')
-            print(error)
+        while True:
+            print('Checking for new song...')
+            song = self.api.getCurrentSong()
+            newSongId = song['item']['id']
+            if newSongId != self.currentSongId:
+                print('New Song!')
+                self.currentSongId = newSongId
+                songQualities = self.api.getSongQualities(newSongId)
+                print('got new song qualities')
+                print(songQualities)
+            time.sleep(1)
 
 class ledThread(threading.Thread):
     def __init__(self):
@@ -53,16 +48,16 @@ class ledThread(threading.Thread):
         try:
             while True:
                 if not songQualities:
-                    print('no q')
+                    # print('no q')
                     # self.leds.colorWipe([255, 0, 0])
                 else:
                     print('yes q')
                     self.leds.mapSongQualitiesToBrightness(songQualities)
                     self.leds.mapSongQualitiesToColors(songQualities)
                     # print(songQualities)
-        except error:
-            print('Error in led thread:')
-            print(error)
+        except Exception as err:
+            print(sys.exc_info())
+            print(err)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
