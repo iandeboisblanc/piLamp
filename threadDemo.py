@@ -46,7 +46,7 @@ class ledThread(threading.Thread):
         global songQualities
         while True:
             if not songQualities:
-                self.colorWipe([255, 0, 0])
+                self.leds.colorWipe([255, 0, 0])
             else:
                 self.leds.mapSongQualitiesToBrightness(songQualities)
                 self.leds.mapSongQualitiesToColors(songQualities)
