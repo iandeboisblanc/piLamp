@@ -54,7 +54,7 @@ class ledThread(threading.Thread):
             while True:
                 if not songQualities:
                     print('no q')
-                    self.leds.colorWipe([255, 0, 0])
+                    # self.leds.colorWipe([255, 0, 0])
                 else:
                     print('yes q')
                     self.leds.mapSongQualitiesToBrightness(songQualities)
