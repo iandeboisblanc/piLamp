@@ -30,6 +30,7 @@ class apiThread(threading.Thread):
         global songQualities
         currentSongId = 'FAKE SHIT!'
         while True:
+            print('Checking for new song...')
             song = self.api.getCurrentSong()
             newSongId = song['item']['id']
             if newSongId != self.currentSongId:
@@ -46,8 +47,10 @@ class ledThread(threading.Thread):
         global songQualities
         while True:
             if not songQualities:
+                print('no q')
                 self.leds.colorWipe([255, 0, 0])
             else:
+                print('yes q')
                 self.leds.mapSongQualitiesToBrightness(songQualities)
                 self.leds.mapSongQualitiesToColors(songQualities)
                 # print(songQualities)
