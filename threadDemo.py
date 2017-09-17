@@ -60,13 +60,15 @@ class apiThread(threading.Thread):
 class ledThread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-        # self.leds = NeoPixelController()
+        self.leds = NeoPixelController()
 
     def run(self):
         global songQualities
         while True:
-            print(songQualities)
-            time.sleep(2)
+            self.leds.mapSongQualitiesToBrightness(songQualities)
+            self.leds.mapSongQualitiesToColors(songQualities)
+            # print(songQualities)
+            # time.sleep(2)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
