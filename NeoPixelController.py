@@ -83,7 +83,7 @@ class NeoPixelController:
         self.setColors(scaledRgbs)
         # return scaledRgbs
 
-    def mapSongQualitiesToBrightness(songQualities, t):
+    def mapSongQualitiesToBrightness(self, songQualities, t):
         bpm = songQualities['tempo'] # float bpm
         timeSignature = songQualities['time_signature'] # int beats / bar
         energy = songQualities['energy'] # 0-1f
