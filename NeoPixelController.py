@@ -18,6 +18,12 @@ def standingWave(point):
     y = (2 * scalar * math.sin(x) * math.cos(t * angularFreq)) % 1
     return y
 
+def bitsToRGB(bits):
+    red = (bits & 0xff0000) >> 16
+    green = (bits & 0x00ff00) >> 8
+    blue = (bits & 0x0000ff)
+    return [red, green, blue]
+
 class NeoPixelController:
     def __init__(self):
         self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
@@ -29,10 +35,10 @@ class NeoPixelController:
             print('Error: not enough color values for number of LEDs.')
             return
         for i in range(self.strip.numPixels()):
-            color = self.strip.getPixelColor(i)
-            print('GOT COLOR!', color)
             color = Color(*colors[i])
             self.strip.setPixelColor(i, color)
+            bitColor = self.strip.getPixelColor(i)
+            print('colors:', bitsToRGB(bitColor), colors[i])
         self.strip.show()
 
     def setBrightness(self, value):
