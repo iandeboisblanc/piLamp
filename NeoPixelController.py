@@ -29,6 +29,8 @@ class NeoPixelController:
             print('Error: not enough color values for number of LEDs.')
             return
         for i in range(self.strip.numPixels()):
+            color = self.strip.getPixelColor(i)
+            print('GOT COLOR!', color)
             color = Color(*colors[i])
             self.strip.setPixelColor(i, color)
         self.strip.show()
@@ -40,8 +42,6 @@ class NeoPixelController:
     def colorWipe(self, colors, wait_ms=50):
         color = Color(colors[0], colors[1], colors[2])
         for i in range(self.strip.numPixels()):
-            color = self.strip.getPixelColor(i)
-            print('GOT COLOR!', color)
             self.strip.setPixelColor(i, color)
             self.strip.show()
             time.sleep(wait_ms/1000.0)
