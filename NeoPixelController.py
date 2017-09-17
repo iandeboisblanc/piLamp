@@ -45,6 +45,7 @@ class NeoPixelController:
             time.sleep(wait_ms/1000.0)
 
     def mapSongQualitiesToColors(self, songQualities):
+        t = time.time()
         bpm = songQualities['tempo'] # float bpm
         timeSignature = songQualities['time_signature'] # int beats / bar
         cheeriness = songQualities['valence'] # 0-1f
@@ -83,7 +84,8 @@ class NeoPixelController:
         self.setColors(scaledRgbs)
         # return scaledRgbs
 
-    def mapSongQualitiesToBrightness(self, songQualities, t):
+    def mapSongQualitiesToBrightness(self, songQualities):
+        t = time.time()
         bpm = songQualities['tempo'] # float bpm
         timeSignature = songQualities['time_signature'] # int beats / bar
         energy = songQualities['energy'] # 0-1f
