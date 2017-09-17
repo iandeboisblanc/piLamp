@@ -17,27 +17,6 @@ SPOTIFY_CLIENT_SECRET   = parser.get('apis', 'spotify_client_secret')
 SPOTIFY_REDIRECT_URL    = parser.get('apis', 'spotify_redirect_url')
 ###
 
-# async def main(username):
-#     # Init Spotify API:
-#
-#     api = SpotifyApiClient(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
-#     # leds = NeoPixelController()
-#
-#     currentSongId = ''
-#     qualities = {}
-#     while True:
-#         song = await api.getCurrentSong()
-#         newSongId = song['item']['id']
-#         if newSongId != currentSongId:
-#             print('New Song!')
-#             currentSongId = newSongId
-#             qualities = await api.getSongQualities(newSongId)
-#             # print(qualities)
-#             # LED change song mode
-#             # LED set new song
-#         await asyncio.sleep(3)
-#         print(currentSongId)
-
 # Global shared between classes
 songQualities = None
 
@@ -66,10 +45,12 @@ class ledThread(threading.Thread):
     def run(self):
         global songQualities
         while True:
-            self.leds.mapSongQualitiesToBrightness(songQualities)
-            self.leds.mapSongQualitiesToColors(songQualities)
-            # print(songQualities)
-            # time.sleep(2)
+            if not songQualities:
+                self.colorWipe([255, 0, 0])
+            else:
+                self.leds.mapSongQualitiesToBrightness(songQualities)
+                self.leds.mapSongQualitiesToColors(songQualities)
+                # print(songQualities)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

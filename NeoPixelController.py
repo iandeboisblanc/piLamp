@@ -36,7 +36,8 @@ class NeoPixelController:
         self.strip.setBrightness(value)
         self.strip.show()
 
-    def colorWipe(self, color, wait_ms=50):
+    def colorWipe(self, colors, wait_ms=50):
+        color = Color(colors[0], colors[1], colors[2])
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
             self.strip.show()
