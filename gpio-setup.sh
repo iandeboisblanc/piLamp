@@ -28,3 +28,5 @@ scons
 # Install compiled library:
 cd python
 sudo python setup.py install
+
+# TODO: include how to make it work for python3?

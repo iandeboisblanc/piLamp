@@ -1,9 +1,9 @@
-import requests
 import sys
-import asyncio
+import threading
+import time
 from configparser import ConfigParser
-from songMapper import generateColors, piecewiseBrightness
 from SpotifyApiClient import SpotifyApiClient
+from NeoPixelController import NeoPixelController
 
 parser = ConfigParser()
 parser.read('config.ini')
@@ -14,26 +14,52 @@ SPOTIFY_CLIENT_SECRET   = parser.get('apis', 'spotify_client_secret')
 SPOTIFY_REDIRECT_URL    = parser.get('apis', 'spotify_redirect_url')
 ###
 
-async def main(username):
-    # Init Spotify API:
+# Global shared between classes
+songQualities = None
 
-    api = SpotifyApiClient(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
-    # leds = NeoPixelController()
+class apiThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.api = SpotifyApiClient(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
+        self.currentSongId = ''
 
-    currentSongId = ''
-    qualities = {}
-    while True:
-        song = await api.getCurrentSong()
-        newSongId = song['item']['id']
-        if newSongId != currentSongId:
-            print('New Song!')
-            currentSongId = newSongId
-            qualities = await api.getSongQualities(newSongId)
-            # print(qualities)
-            # LED change song mode
-            # LED set new song
-        await asyncio.sleep(3)
-        print(currentSongId)
+    def run(self):
+        global songQualities
+        currentSongId = 'FAKE SHIT!'
+        try:
+            while True:
+                print('Checking for new song...')
+                song = self.api.getCurrentSong()
+                newSongId = song['item']['id']
+                if newSongId != self.currentSongId:
+                    print('New Song!')
+                    self.currentSongId = newSongId
+                    songQualities = self.api.getSongQualities(newSongId)
+                    print(songQualities)
+                time.sleep(2)
+        except Exception as err:
+            print('Error in API thread: {}'.format(err))
+            # print(sys.exc_info())
+
+
+class ledThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.leds = NeoPixelController()
+
+    def run(self):
+        global songQualities
+        try:
+            while True:
+                if not songQualities:
+                    self.leds.colorWipe([255, 0, 0])
+                else:
+                    # print(songQualities)
+                    self.leds.mapSongQualitiesToBrightness(songQualities)
+                    self.leds.mapSongQualitiesToColors(songQualities)
+        except Exception as err:
+            print('Error in LED thread: {}'.format(err))
+            # print(sys.exc_info())
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -44,6 +70,18 @@ if __name__ == '__main__':
         sys.exit()
 
     # token = generateSpotifyToken(username, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URL)
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(username))
-    loop.close()
+    thread1 = apiThread()
+    thread2 = ledThread()
+
+    thread1.start()
+    thread2.start()
+
+    # USEFUL LOGS
+    # print('Playing:', song['item']['name'])
+    # # if song['is_playing']:
+    # qualities = getSongQualities(token, song['item']['id'])
+    # print('BPM:', qualities['tempo'])
+    # print('Time Signature:', qualities['time_signature'])
+    # print('Energy:', qualities['energy'])
+    # print('Cheeriness', qualities['valence'])
+    # print('Danciness', qualities['danceability'])
