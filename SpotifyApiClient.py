@@ -22,10 +22,8 @@ class SpotifyApiClient:
         return r.json()
 
     def getSongQualities(self, songId):
-        print('start fetch')
         headers = {
             'Authorization': 'Bearer {}'.format(self.token)
         }
         r = requests.get('https://api.spotify.com/v1/audio-features/{}'.format(songId), headers=headers)
-        print('end fetch')
         return r.json()

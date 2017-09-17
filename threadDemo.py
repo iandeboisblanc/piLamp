@@ -33,9 +33,12 @@ class apiThread(threading.Thread):
             if newSongId != self.currentSongId:
                 print('New Song!')
                 self.currentSongId = newSongId
-                print('got new song qualities')
-                print(songQualities)
-                songQualities = self.api.getSongQualities(newSongId)
+                # print(songQualities)
+                print('API THREAD start fetch')
+                temp = self.api.getSongQualities(newSongId)
+                print('API THEAD done fetch')
+                print(temp)
+                songQualities = temp
                 print(songQualities)
             time.sleep(1)
 
@@ -49,10 +52,12 @@ class ledThread(threading.Thread):
         try:
             while True:
                 if not songQualities:
-                    print('no q')
+                    # print('no q')
+                    a = None
                     # self.leds.colorWipe([255, 0, 0])
                 else:
-                    print('yes q')
+                    print('LED thread found qualities')
+                    print(songQualities)
                     self.leds.mapSongQualitiesToBrightness(songQualities)
                     self.leds.mapSongQualitiesToColors(songQualities)
                     # print(songQualities)
