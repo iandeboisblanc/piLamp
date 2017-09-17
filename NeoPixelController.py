@@ -21,6 +21,7 @@ def standingWave(point):
 class NeoPixelController:
     def __init__(self):
         self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
+        self.strip.begin()
         self.xValues = [2.0 * math.pi * x / LED_COUNT for x in range(0, LED_COUNT)]
 
     def setColors(self, colors):
