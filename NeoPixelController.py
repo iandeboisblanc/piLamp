@@ -18,11 +18,11 @@ def standingWave(point):
     y = (2 * scalar * math.sin(x) * math.cos(t * angularFreq)) % 1
     return y
 
-def bitsToRGB(bits):
-    red = (bits & 0xff0000) >> 16
-    green = (bits & 0x00ff00) >> 8
-    blue = (bits & 0x0000ff)
-    return [red, green, blue]
+# def bitsToRGB(bits):
+#     red = (bits & 0xff0000) >> 16
+#     green = (bits & 0x00ff00) >> 8
+#     blue = (bits & 0x0000ff)
+#     return [red, green, blue]
 
 class NeoPixelController:
     def __init__(self):
@@ -35,10 +35,11 @@ class NeoPixelController:
             print('Error: not enough color values for number of LEDs.')
             return
         for i in range(self.strip.numPixels()):
+            # rgb = colors[i]
+            # if brightnessFilter:
+                # rgb = [max(val - brightnessFilter, 0) for val in rgb]
             color = Color(*colors[i])
             self.strip.setPixelColor(i, color)
-            bitColor = self.strip.getPixelColor(i)
-            print('colors:', bitsToRGB(bitColor), colors[i])
         self.strip.show()
 
     def setBrightness(self, value):
@@ -51,15 +52,6 @@ class NeoPixelController:
             self.strip.setPixelColor(i, color)
             self.strip.show()
             time.sleep(wait_ms/1000.0)
-
-    def fadeOut(self, time_ms=1000):
-        time = time.time();
-        for i in range(self.strip.numPixels()):
-            color = self.strip.getPixelColor(i)
-            print('GOT COLOR!', color)
-
-    def fadeIn(self, time_ms=1000):
-        a = None
 
     def mapSongQualitiesToColors(self, songQualities):
         t = time.time()

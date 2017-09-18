@@ -62,12 +62,16 @@ class ledThread(threading.Thread):
     def loop(self):
         global songQualities
         if not songQualities:
-            self.leds.colorWipe([255, 0, 0])
+            self.leds.colorWipe([0, 80, 160])
+            self.leds.colorWipe([0, 0, 0])
             a = None
         else:
             print(songQualities)
             self.leds.mapSongQualitiesToBrightness(songQualities)
             self.leds.mapSongQualitiesToColors(songQualities)
+            # brightness = self.leds.getBrightness(songQualities)
+            # colors = self.leds.getColors(songQualities)
+            # if transitioning: brightness = temperBrightness(brightness, amount)
 
         # global songQualities
         # if !songQualities:
